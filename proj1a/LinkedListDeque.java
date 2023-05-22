@@ -96,7 +96,7 @@ public class LinkedListDeque<T> {
             tar=tar.next;
         }
     }
-    private T getRecursive(int index){
+    public T getRecursive(int index){
         int i=0;
         node tar=sentinel;
         if(i==index){
