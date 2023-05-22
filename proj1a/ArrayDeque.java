@@ -52,7 +52,7 @@ public class ArrayDeque<T> {
         last=ptr2;
         array=newarray;
 
-        
+
     }
     public void shrink(){
         T[]newarray=(T[])new Object[length/2];
@@ -88,21 +88,7 @@ public class ArrayDeque<T> {
     }
     public T removeFirst(){
         if(length>=16&&length/size>=4){
-            shrink();
-        }
-        if(size==0){
-            return null;
-        }
-        T ret=array[front];
-        front=plusone(front,length);
-        size--;
-        return ret;
-
-    }
-    public T removeLast(){
-        if(length>=16&&length/size>=4){
-            shrink();
-        }
+            shrink();}
         if(size==0){
             return null;
         }
@@ -126,3 +112,4 @@ public class ArrayDeque<T> {
         }
     }
 }
+
