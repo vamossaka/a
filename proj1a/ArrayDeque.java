@@ -97,6 +97,17 @@ public class ArrayDeque<T> {
         size--;
         return ret;
     }
+    public T removeLast() {
+        if (length >= 16 && length / size >= 4) {
+            shrink();
+        }
+        if (size == 0) {
+            return null;
+        }
+        last = minusone(last);
+        size--;
+        return array[last];
+    }
     public T get(int index){
         if (index>=size){
             return null;
