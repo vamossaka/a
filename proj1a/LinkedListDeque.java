@@ -25,8 +25,8 @@ public class LinkedListDeque<T> {
     }
     public boolean isEmpty(){
         if(size==0)
-            return true;
-        else
+        {return true;}
+
             return  false;
     }
     public void addFirst(T item)
@@ -46,7 +46,7 @@ public class LinkedListDeque<T> {
 
     }
     public T removeFirst(){
-        if(sentinel.next==sentinel)
+        if(size==0)
         {
             return  null;
         }
