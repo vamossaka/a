@@ -1,9 +1,9 @@
 public class ArrayDeque<T> {
-    public T[] array;
-    public int size;
-    public int length;
-    public int front;
-    public int last;
+    private T[] array;
+    private int size;
+    private int length;
+    private int front;
+    private int last;
     public ArrayDeque(){
         array=(T[])new Object[8];
         size=0;
@@ -38,7 +38,7 @@ public class ArrayDeque<T> {
         return index+1;
     }
 
-    public void grow(){
+    private void grow(){
         T[] newarray=(T[])new Object[length*2];
         int ptr1=front;
         int ptr2=last;
@@ -54,7 +54,7 @@ public class ArrayDeque<T> {
 
 
     }
-    public void shrink(){
+    private void shrink(){
         T[]newarray=(T[])new Object[length/2];
         int ptr1=front;
         int ptr2=length/4;
