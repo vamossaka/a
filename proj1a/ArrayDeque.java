@@ -1,126 +1,90 @@
 public class ArrayDeque<T> {
-    private T[] array;
+
+    private int nextFirst;
+    private int nextLast;
+    private int capacity;
+    private T[]items;
     private int size;
-    private int length;
-    private int front;
-    private int last;
     public ArrayDeque(){
-        array=(T[])new Object[8];
+        items=(T[])new Object[8];
+        this.capacity=items.length;
+        nextFirst=capacity-1;
+        nextLast=0;
         size=0;
-        length=8;
-        front=4;
-        last=4;}
-    public boolean isEmpty(){
-        if(size==0)
-        {
-            return true;
-        }
-        else
-            return false;
     }
-    public int size(){
+    private void resize(int capacity){
+        T[]a=(T[])new Object[capacity];
+        //由于nextFirst和nextLast的位置不确定，只能一个一个地复制到新的数组中
+        //从nextFirst右边的第一个点开始复制
+        //到nextLast左边的第一个点复制结束
+        for (int i=1;i<=size;i++)
+            a[i]=items[(++nextFirst)%this.capacity];
+        this.capacity=capacity;
+        //这两个指针指向什么地方已经不重要了
+        nextFirst=0;
+        nextLast=size+1;
+        items=a;
+    }
+    public void addFirst(T item) {
+        //直接当size等于capacity时调整大小，而不是看两个指针的相对位置
+        if (size==capacity)
+            resize(capacity*2);
+        items[nextFirst]=item;
+        size++;
+        //nextFirst有可能越界
+        nextFirst=nextFirst==0?capacity-1:nextFirst-1;
+    }
+
+    public void addLast(T item) {
+        if (size==capacity)
+            resize(capacity*2);
+        items[nextLast]=item;
+        size++;
+        //nextLast有可能越界
+        nextLast=(nextLast+1)%capacity;
+    }
+
+    public boolean isEmpty() {
+        return size==0;
+    }
+
+    public int size() {
         return size;
     }
-    private int minusone(int index){
-        if(index==0)
-        {
-            return length-1;
-        }
-        return index-1;
-    }
-    private int plusone(int index,int module)
-    {
-        index%=module;
-        if(index==module-1)
-        {
-            return 0;
-        }
-        return index+1;
+
+    public void printDeque() {
+        //nextFirst有可能指向最后一个位置
+        for (int i=(nextFirst+1)%capacity;i!=nextLast-1;i=(i+1)%capacity)
+            System.out.print(items[i]+" ");
+        System.out.print(items[nextLast-1]);
     }
 
-    private void grow(){
-        T[] newarray=(T[])new Object[length*2];
-        int ptr1=front;
-        int ptr2=last;
-        while(ptr1!=last){
-            newarray[ptr2]=array[ptr1];
-            ptr1=plusone(ptr1,length);
-            ptr2=plusone(ptr2,length);
-        }
-        length*=2;
-        front=ptr1;
-        last=ptr2;
-        array=newarray;
-
-
-    }
-    private void shrink(){
-        T[]newarray=(T[])new Object[length/2];
-        int ptr1=front;
-        int ptr2=length/4;
-        while(ptr1!=last){
-            newarray[ptr2]=array[ptr1];
-            ptr1=plusone(ptr1,length);
-            ptr2=plusone(ptr2,length);
-        }
-        front=length/4;
-        last=ptr2;
-        length/=2;
-        array=newarray;
-    }
-    public void addFirst(T item){
-        if(size==length-1)
-        {
-            grow();
-        }
-
-        array[front]=item;
-        front=minusone(front);
-        size++;
-    }
-    public void addLast(T item){
-        if(size==length-1){
-            grow();
-        }
-        array[last]=item;
-        last=plusone(last,length);
-        size++;
-    }
-    public T removeFirst(){
-        if(length>=16&&length/size>=4){
-            shrink();}
-        if(size==0){
-            return null;
-        }
-        T ret=array[last];
-        last=minusone(last);
+    public T removeFirst() {
+        //当数组的内容为空的时候，才无法进行remove操作，而不是取决于nextFirst的位置。
+        if (size==0)return null;
+        nextFirst=(nextFirst+1)%capacity;
+        T temp=items[nextFirst];
+        items[nextFirst]=null;
         size--;
-        return ret;
+        if (capacity>=16&&size<capacity/4)
+            resize(capacity/2);
+        return temp;
     }
+
     public T removeLast() {
-        if (length >= 16 && length / size >= 4) {
-            shrink();
-        }
-        if (size == 0) {
-            return null;
-        }
-        last = minusone(last);
+        if (size==0)return null;
+        nextLast=nextLast==0?capacity-1:nextLast-1;
+        T temp=items[nextLast];
+        items[nextLast]=null;
         size--;
-        return array[last];
+        if (capacity>=16&&size<capacity/4)
+            resize(capacity/2);
+        return temp;
     }
-    public T get(int index){
-        if (index>=size){
-            return null;
 
-        }
-        return array[index];
-    }
-    public void printDeque(){
-        int ptr1=front;
-        while (ptr1!=last){
-            System.out.print(array[ptr1]+" ");
-            ptr1=plusone(ptr1,length);
-        }
+    public T get(int index) {
+        if (index>=size)
+            return null;
+        return items[(nextFirst+1+index)%capacity];
     }
 }
-
