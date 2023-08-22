@@ -19,7 +19,12 @@ public class TestPalindrome {
         OffByOne a=new OffByOne();
         assertTrue(palindrome.isPalindrome("aabbaa"));
         assertFalse(palindrome.isPalindrome("acba"));
+        assertTrue(palindrome.isPalindrome(""));
+        assertTrue(palindrome.isPalindrome("&"));
         assertTrue(palindrome.isPalindrome("falke",a));
+        assertFalse(palindrome.isPalindrome("aaabbbaaa",a));
+        assertTrue(palindrome.isPalindrome("",a));
+        assertTrue(palindrome.isPalindrome("&",a));
     }
 
 }
