@@ -15,27 +15,22 @@ public class Palindrome {
     }
     public boolean isPalindrome(String word)
     {
-       Deque pal=wordToDeque(word);
-       int n=word.length();
-       return helper(pal,0,n-1);
-    }
-    private boolean helper(Deque tar,int start,int end){
-        if(start==end)
-            return true;
-        if(helper(tar,start+1,end-1)&&tar.get(start)==tar.get(end))
-        {
-            return true;
-        }
-        else
-            return false;
-    }
-    public boolean isPalindrome(String word, CharacterComparator cc){
-        int n=word.length();
         Deque pal=wordToDeque(word);
-        int start=0,end=n-1;
-        while (start<end)
+        while (pal.size()>1)
         {
-            if(!cc.equalChars((char) pal.get(start),(char) pal.get(end)))
+            if(pal.removeFirst()!=pal.removeLast())
+                return false;
+        }
+        return true;
+    }
+
+
+
+    public boolean isPalindrome(String word, CharacterComparator cc){
+        Deque pal=wordToDeque(word);
+        while (pal.size()>1)
+        {
+            if(!cc.equalChars((char) pal.removeFirst(),(char) pal.removeLast()))
             return false;
         }
         return true;

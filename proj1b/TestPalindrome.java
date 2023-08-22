@@ -14,7 +14,7 @@ public class TestPalindrome {
         }
         assertEquals("persiflage", actual);
     }
-
+    @Test
     public void testisPalindrome() {
         OffByOne a=new OffByOne();
         assertTrue(palindrome.isPalindrome("aabbaa"));
