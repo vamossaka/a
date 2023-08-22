@@ -25,7 +25,10 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>{
         //       here shadows the field we inherit from AbstractBoundedQueue, so//       you'll need to use this.capacity to set the capacity.
        this.first=0;
        this.last=0;
+       this.fillCount=0;
        this.rb=(T[]) new Object[capacity];
+       this.capacity=capacity;
+
 
     }
 
@@ -34,9 +37,10 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>{
      * throw new RuntimeException("Ring buffer overflow"). Exceptions
      * covered Monday.
      */
+    @Override
     public void enqueue(T x) {
         // TODO: Enqueue the item. Don't forget to increase fillCount and update last.
-       if(last==first)
+       if(isFull())
        {
            throw new RuntimeException("Ring Buffer Overflow");
        }
@@ -50,9 +54,10 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>{
      * throw new RuntimeException("Ring buffer underflow"). Exceptions
      * covered Monday.
      */
+    @Override
     public T dequeue() {
         // TODO: Dequeue the first item. Don't forget to decrease fillCount and update 
-      if(fillCount==0)
+      if(isEmpty())
           throw new RuntimeException("Ring Buffer Underflow");
       T ret=rb[first];
       fillCount--;
@@ -64,9 +69,10 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>{
     /**
      * Return oldest item, but don't remove it.
      */
+    @Override
     public T peek() {
         // TODO: Return the first item. None of your instance variables should change.
-        if(fillCount==0)
+        if(isEmpty())
             throw new RuntimeException("Ring Buffer Underflow");
         T tar=rb[first];
         return tar;
@@ -88,6 +94,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T>{
             return ret;
         }
     }
+    @Override
     public Iterator<T> iterator(){
         return new ArrayRingBufferiterator();
     }
